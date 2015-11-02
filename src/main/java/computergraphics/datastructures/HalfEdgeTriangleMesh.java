@@ -1,7 +1,7 @@
-/**
- * 
- */
 package computergraphics.datastructures;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Gery
@@ -9,46 +9,57 @@ package computergraphics.datastructures;
  */
 public class HalfEdgeTriangleMesh implements ITriangleMesh {
 	
+	private List<Vertex> vertexList = new ArrayList<Vertex>();
+	
+	private List<TriangleFacet> facetList = new ArrayList<TriangleFacet>();
+	
+	private List<HalfEdge> halfEdgeList = new ArrayList<HalfEdge>();
+	
+	private String textureName;
+	
 	@Override
 	public void addTriangle(int vertexIndex1, int vertexIndex2, int vertexIndex3) {
-		// TODO Auto-generated method stub
+		TriangleFacet facet = new TriangleFacet();
+		HalfEdge halfEdge = new HalfEdge();
+		halfEdge.setStartVertex(getVertex(vertexIndex1));
 		
+		facet.setHalfEdge(halfEdge);
+		facetList.add(facet);
+		
+		//TODO facet erstellen halfEdge erstellen beide in liste einfügen
 	}
 	
 	@Override
 	public int addVertex(Vertex v) {
-		// TODO Auto-generated method stub
-		return 0;
+		vertexList.add(v);
+		return vertexList.indexOf(v);
 	}
 	
 	@Override
 	public int getNumberOfTriangles() {
-		// TODO Auto-generated method stub
-		return 0;
+		return facetList.size();
 	}
 	
 	@Override
 	public int getNumberOfVertices() {
-		// TODO Auto-generated method stub
-		return 0;
+		return vertexList.size();
 	}
 
 	@Override
 	public Vertex getVertex(int index) {
-		// TODO Auto-generated method stub
-		return null;
+		return vertexList.get(index);
 	}
 
 	@Override
 	public TriangleFacet getFacet(int facetIndex) {
-		// TODO Auto-generated method stub
-		return null;
+		return facetList.get(facetIndex);
 	}
 	
 	@Override
 	public void clear() {
-		// TODO Auto-generated method stub
-		
+		vertexList.clear();
+		facetList.clear();
+		halfEdgeList.clear();
 	}
 
 	@Override
@@ -59,14 +70,12 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 
 	@Override
 	public void setTextureFilename(String filename) {
-		// TODO Auto-generated method stub
-		
+		textureName = filename;
 	}
 
 	@Override
 	public String getTextureFilename() {
-		// TODO Auto-generated method stub
-		return null;
+		return textureName;
 	}
 	
 }
