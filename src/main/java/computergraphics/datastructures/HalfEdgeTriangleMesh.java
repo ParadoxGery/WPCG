@@ -13,17 +13,31 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 	
 	private List<TriangleFacet> facetList = new ArrayList<TriangleFacet>();
 	
-	private List<HalfEdge> halfEdgeList = new ArrayList<HalfEdge>();
+	private List<HalfEdge> edgeList = new ArrayList<HalfEdge>();
 	
 	private String textureName;
 	
 	@Override
 	public void addTriangle(int vertexIndex1, int vertexIndex2, int vertexIndex3) {
 		TriangleFacet facet = new TriangleFacet();
-		HalfEdge halfEdge = new HalfEdge();
-		halfEdge.setStartVertex(getVertex(vertexIndex1));
+		HalfEdge halfEdge1 = new HalfEdge();
+		HalfEdge halfEdge2 = new HalfEdge();
+		HalfEdge halfEdge3 = new HalfEdge();
 		
-		facet.setHalfEdge(halfEdge);
+		halfEdge1.setStartVertex(getVertex(vertexIndex1));
+		halfEdge2.setStartVertex(getVertex(vertexIndex2));
+		halfEdge3.setStartVertex(getVertex(vertexIndex2));
+		halfEdge1.setNext(halfEdge2);
+		halfEdge2.setNext(halfEdge3);
+		//TODO zeigt 3 auf 1 ?
+		halfEdge3.setNext(halfEdge1);
+		
+		facet.setHalfEdge(halfEdge1);
+		
+		//hinzufügen aller objekte
+		edgeList.add(halfEdge1);
+		edgeList.add(halfEdge2);
+		edgeList.add(halfEdge3);
 		facetList.add(facet);
 		
 		//TODO facet erstellen halfEdge erstellen beide in liste einfügen
@@ -59,7 +73,7 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 	public void clear() {
 		vertexList.clear();
 		facetList.clear();
-		halfEdgeList.clear();
+		edgeList.clear();
 	}
 
 	@Override
