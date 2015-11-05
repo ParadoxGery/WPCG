@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import computergraphics.math.Vector3;
 
 /**
  * @author Gery
@@ -145,7 +146,15 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 	
 	@Override
 	public void computeTriangleNormals() {
-		
+		for (TriangleFacet triangle : facetList){
+			Vertex vertex1 = triangle.getHalfEdge().getStartVertex();
+			Vertex vertex2 = triangle.getHalfEdge().getNext().getStartVertex();
+			Vertex vertex3 = triangle.getHalfEdge().getNext().getNext().getStartVertex();
+			Vector3 v12 = new Vector3(vertex2.getPosition().subtract(vertex1.getPosition()));
+			Vector3 v13 = new Vector3(vertex3.getPosition().subtract(vertex1.getPosition()));
+			Vector3 normal = new Vector3(v12.cross(v13).getNormalized());
+			triangle.setNormal(normal);
+		}
 	}
 	
 	@Override
