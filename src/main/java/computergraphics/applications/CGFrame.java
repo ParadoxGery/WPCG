@@ -7,11 +7,16 @@
 
 package computergraphics.applications;
 
+import computergraphics.datastructures.HalfEdgeTriangleMesh;
+import computergraphics.datastructures.ITriangleMesh;
+import computergraphics.datastructures.ObjIO;
 import computergraphics.framework.AbstractCGFrame;
+import computergraphics.scenegraph.ColorNode;
 import computergraphics.scenegraph.ShaderNode;
 import computergraphics.scenegraph.ShaderNode.ShaderType;
 import computergraphics.scenegraph.SingleTriangleNode;
 import computergraphics.scenegraph.SphereNode;
+import computergraphics.scenegraph.TriangleMeshNode;
 
 /**
  * Application for the first exercise.
@@ -35,13 +40,15 @@ public class CGFrame extends AbstractCGFrame {
     ShaderNode shaderNode = new ShaderNode(ShaderType.PHONG);
     getRoot().addChild(shaderNode);
 
-    // Simple triangle
-    SingleTriangleNode triangleNode = new SingleTriangleNode();
-    shaderNode.addChild(triangleNode);
-
-    // Sphere
-    SphereNode sphereNode = new SphereNode(0.25, 20);
-    shaderNode.addChild(sphereNode);
+    ColorNode objColor = new ColorNode(114.0/255,84.0/255,154.0/255);
+    shaderNode.addChild(objColor);
+    
+    ObjIO objio = new ObjIO();
+    ITriangleMesh mesh = new HalfEdgeTriangleMesh();
+    objio.einlesen("meshes/cow.obj", mesh);
+    
+    TriangleMeshNode obj = new TriangleMeshNode(mesh);
+    objColor.addChild(obj);
   }
 
   /*
@@ -51,7 +58,7 @@ public class CGFrame extends AbstractCGFrame {
    */
   @Override
   protected void timerTick() {
-    System.out.println("Tick");
+    //System.out.println("Tick");
   }
 
   public void keyPressed(int keyCode) {
