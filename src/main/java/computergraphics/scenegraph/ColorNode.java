@@ -24,6 +24,10 @@ public class ColorNode extends Node {
 		this(col.getRed(), col.getGreen(), col.getBlue());
 	}
 	
+	public ColorNode(javafx.scene.paint.Color color){
+		this(color.getRed(),color.getGreen(),color.getBlue());
+	}
+	
 	@Override
 	public void drawGl(GL2 gl) {
 		// Remember current state of the render system

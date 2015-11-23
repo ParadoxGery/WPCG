@@ -17,6 +17,7 @@ import computergraphics.scenegraph.ShaderNode.ShaderType;
 import computergraphics.scenegraph.SingleTriangleNode;
 import computergraphics.scenegraph.SphereNode;
 import computergraphics.scenegraph.TriangleMeshNode;
+import javafx.scene.paint.Color;
 
 /**
  * Application for the first exercise.
@@ -40,7 +41,7 @@ public class CGFrame extends AbstractCGFrame {
     ShaderNode shaderNode = new ShaderNode(ShaderType.PHONG);
     getRoot().addChild(shaderNode);
 
-    ColorNode objColor = new ColorNode(114,84,154);
+    ColorNode objColor = new ColorNode(Color.MEDIUMPURPLE.darker());//114,84,154
     shaderNode.addChild(objColor);
     
     ObjIO objio = new ObjIO();

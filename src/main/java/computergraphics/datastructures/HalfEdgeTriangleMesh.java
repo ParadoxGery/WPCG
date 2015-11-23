@@ -58,6 +58,10 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 		getVertex(vertexIndex2).setHalfEgde(halfEdge2);
 		getVertex(vertexIndex3).setHalfEgde(halfEdge3);
 
+		halfEdge1.setFacet(facet);
+		halfEdge2.setFacet(facet);
+		halfEdge3.setFacet(facet);
+		
 		facet.setHalfEdge(halfEdge1);
 		
 		// speichern aller objekte
