@@ -12,10 +12,12 @@ import computergraphics.datastructures.ITriangleMesh;
 import computergraphics.datastructures.ObjIO;
 import computergraphics.framework.AbstractCGFrame;
 import computergraphics.scenegraph.ColorNode;
+import computergraphics.scenegraph.CurvatureNode;
 import computergraphics.scenegraph.ShaderNode;
 import computergraphics.scenegraph.ShaderNode.ShaderType;
 import computergraphics.scenegraph.SingleTriangleNode;
 import computergraphics.scenegraph.SphereNode;
+import computergraphics.scenegraph.TriangleMeshLaPlaceNode;
 import computergraphics.scenegraph.TriangleMeshNode;
 import javafx.scene.paint.Color;
 
@@ -31,6 +33,11 @@ public class CGFrame extends AbstractCGFrame {
    */
   private static final long serialVersionUID = 4257130065274995543L;
 
+  private TriangleMeshLaPlaceNode laPlace; 
+  private CurvatureNode curveNode;
+  private HalfEdgeTriangleMesh mesh;
+  
+  private double a = .5;
   /**
    * Constructor.
    */
@@ -45,11 +52,15 @@ public class CGFrame extends AbstractCGFrame {
     shaderNode.addChild(objColor);
     
     ObjIO objio = new ObjIO();
-    ITriangleMesh mesh = new HalfEdgeTriangleMesh();
+    mesh = new HalfEdgeTriangleMesh();
     objio.einlesen("meshes/cow.obj", mesh);
     
-    TriangleMeshNode obj = new TriangleMeshNode(mesh);
-    objColor.addChild(obj);
+    //laPlace = new TriangleMeshLaPlaceNode(mesh);
+    //objColor.addChild(laPlace);
+    
+    curveNode = new CurvatureNode(mesh);
+    shaderNode.addChild(curveNode);
+    
   }
 
   /*
@@ -63,7 +74,11 @@ public class CGFrame extends AbstractCGFrame {
   }
 
   public void keyPressed(int keyCode) {
-    System.out.println("Key pressed: " + (char) keyCode);
+	  System.out.println("Key pressed: " + (char) keyCode);
+	    if((char)keyCode == 'S'){
+    		mesh.doLaplaceSmoothing(a);
+	    	curveNode.setUpdateGlList(true);
+	    }
   }
 
   /**

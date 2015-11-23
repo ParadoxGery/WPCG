@@ -18,7 +18,7 @@ public class Vertex {
   /**
    * 3D position of the vertex.
    */
-  private final Vector3 position = new Vector3(0, 0, 0);
+  private Vector3 position = new Vector3(0, 0, 0);
 
   /**
    * (Normalized) normal direction of the vertex.
@@ -74,6 +74,10 @@ public class Vertex {
 
   public Vector3 getPosition() {
     return position;
+  }
+  
+  public void setPosition(Vector3 position){
+	  this.position.copy(position);
   }
 
   public Vector3 getNormal() {

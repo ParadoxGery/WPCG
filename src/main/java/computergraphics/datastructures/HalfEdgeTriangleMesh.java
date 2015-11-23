@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import computergraphics.math.Vector3;
+import javafx.scene.paint.Color;
 
 /**
  * @author Gery
@@ -61,9 +62,9 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 		halfEdge1.setFacet(facet);
 		halfEdge2.setFacet(facet);
 		halfEdge3.setFacet(facet);
-		
+
 		facet.setHalfEdge(halfEdge1);
-		
+
 		// speichern aller objekte
 		edgeList.add(halfEdge1);
 		edgeList.add(halfEdge2);
@@ -124,6 +125,92 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 		}
 	}
 
+	/**
+	 * Berechne Vertexnormalen anhand der umliegenden Faceten
+	 */
+	private void computeVertexNormals() {
+		for (Vertex vertex : vertexList) {
+			Set<HalfEdge> halfEdgeSet = edgesOnPoint.get(vertex);
+			Set<TriangleFacet> usedFacetes = new HashSet<TriangleFacet>();
+			Vector3 vertexNormal = new Vector3(0, 0, 0);
+			// Speicher Dreieck in Set,wenn es schon vorhanden ist wurde es
+			// schon beruecksichtigt
+			for (HalfEdge halfEdge : halfEdgeSet) {
+				if (usedFacetes.add(halfEdge.getFacet())) {
+					vertexNormal = vertexNormal.add(halfEdge.getFacet().getNormal());
+				}
+			}
+			vertexNormal.normalize();
+			vertex.setNormal(vertexNormal);
+		}
+	}
+
+	/**
+	 * Fuehrt eine Laplace Glaettung durch
+	 * 
+	 * @param a
+	 *            Laplace Faktor
+	 */
+	public void doLaplaceSmoothing(double a) {
+		Map<Vertex, Vector3> vertexFocus = new HashMap<Vertex, Vector3>();
+		// Speichere Gewichtungen pro Vertex ab
+		for (Vertex vertex : vertexList) {
+			Vector3 neighbourFocus = new Vector3();
+			for (HalfEdge halfEdge : edgesOnPoint.get(vertex)) {
+				neighbourFocus = neighbourFocus.add(halfEdge.getOpposite().getStartVertex().getPosition());
+			}
+			// 1/N(Vertices-Neighbours)
+			neighbourFocus = neighbourFocus.multiply(1.0 / edgesOnPoint.get(vertex).size());
+			vertexFocus.put(vertex, neighbourFocus);
+		}
+		// Bewege Vertex
+		for (Vertex vertex : vertexList) {
+			// p=a*p+(1-a)*c
+
+			Vector3 position = new Vector3(vertex.getPosition()).multiply(a);
+			Vector3 newPosition = vertexFocus.get(vertex).multiply(1 - a);
+			position = position.add(newPosition);
+			vertex.setPosition(position);
+		}
+		computeTriangleNormals();
+	}
+
+	public void doComputeCurvature() {
+		Map<Vertex, Double> curvatureMap = new HashMap<Vertex, Double>();
+		double minCurvature = Double.MAX_VALUE, maxCurvature = 0;
+		for (Vertex vertex : vertexList) {
+			double avAng = 0;
+			double areaSum = 0;
+			for (HalfEdge halfEdge : edgesOnPoint.get(vertex)) {
+				areaSum += halfEdge.getFacet().getArea();
+				double normals = vertex.getNormal().multiply(halfEdge.getFacet().getNormal());
+				double length = vertex.getNormal().getNorm() * halfEdge.getFacet().getNormal().getNorm();
+				avAng += Math.acos(normals / length);
+			}
+			avAng = avAng / edgesOnPoint.get(vertex).size();
+			double curvature = avAng / areaSum;
+			if (curvature > maxCurvature) {
+				maxCurvature = curvature;
+			}
+			if (minCurvature >= curvature) {
+				minCurvature = curvature;
+			}
+			curvatureMap.put(vertex, curvature);
+		}
+		Color max = Color.DARKRED.brighter().brighter();// milka
+		Color min = Color.YELLOW;
+		Vector3 minColor = new Vector3(min.getRed(), min.getGreen(), min.getBlue());
+		Vector3 maxColor = new Vector3(max.getRed(), max.getGreen(), max.getBlue());
+		Vector3 colorDif = new Vector3(max.getRed() - min.getRed(), max.getGreen() - min.getGreen(),
+				max.getBlue() - min.getBlue());
+		for (Vertex v : vertexList) {
+			double m = (curvatureMap.get(v) - minCurvature) / (maxCurvature - minCurvature);
+			Vector3 color = minColor.add(colorDif.multiply(m * 100));
+			
+			v.setColor(color);
+		}
+	}
+
 	@Override
 	public int addVertex(Vertex v) {
 		vertexList.add(v);
@@ -168,6 +255,8 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 			Vector3 normal = new Vector3(v12.cross(v13).getNormalized());
 			triangle.setNormal(normal);
 		}
+		computeVertexNormals();
+		doComputeCurvature();
 	}
 
 	@Override
