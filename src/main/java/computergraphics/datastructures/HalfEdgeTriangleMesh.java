@@ -131,14 +131,9 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 	private void computeVertexNormals() {
 		for (Vertex vertex : vertexList) {
 			Set<HalfEdge> halfEdgeSet = edgesOnPoint.get(vertex);
-			Set<TriangleFacet> usedFacetes = new HashSet<TriangleFacet>();
 			Vector3 vertexNormal = new Vector3(0, 0, 0);
-			// Speicher Dreieck in Set,wenn es schon vorhanden ist wurde es
-			// schon beruecksichtigt
 			for (HalfEdge halfEdge : halfEdgeSet) {
-				if (usedFacetes.add(halfEdge.getFacet())) {
-					vertexNormal = vertexNormal.add(halfEdge.getFacet().getNormal());
-				}
+				vertexNormal = vertexNormal.add(halfEdge.getFacet().getNormal());
 			}
 			vertexNormal.normalize();
 			vertex.setNormal(vertexNormal);
