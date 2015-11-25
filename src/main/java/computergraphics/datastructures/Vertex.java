@@ -18,7 +18,7 @@ public class Vertex {
   /**
    * 3D position of the vertex.
    */
-  private Vector3 position = new Vector3(0, 0, 0);
+  private final Vector3 position = new Vector3(0, 0, 0);
 
   /**
    * (Normalized) normal direction of the vertex.
