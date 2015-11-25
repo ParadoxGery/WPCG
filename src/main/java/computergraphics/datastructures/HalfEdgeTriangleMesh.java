@@ -76,6 +76,16 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 		saveEdgesOnPoint(getVertex(vertexIndex3), halfEdge3);
 
 	}
+	
+	private void createTriangles(List<Vector3> points, List<Double> values){
+		double tau = 0.5;
+		int caseIndex = 0;
+		for(int i = 0; i< values.size(); i++){
+			if(values.get(i)>tau){
+				caseIndex += Math.pow(2, i);
+			}
+		}
+	}
 
 	/**
 	 * Dies Methode findet eine Kante von Ziel zu Start der gegebenen Kante
