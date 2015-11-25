@@ -86,12 +86,26 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 				caseIndex += Math.pow(2, i);
 			}
 		}
+		List<Integer> edges = getCaseEdgeList(caseIndex);
+		for (int i = 0; i < edges.size(); i++) {
+			int p1i = EdgeToPoint.valueOf("E" + i).getPointIndexes().get(0);
+			int p2i = EdgeToPoint.valueOf("E" + i).getPointIndexes().get(1);
+			Vector3 p = computePosition(points.get(p1i), points.get(p2i), values.get(p1i), values.get(p2i), tau);
+		}
+	}
+
+	private Vector3 computePosition(Vector3 p1, Vector3 p2, double v1, double v2, double tau) {
+		double t = (tau - v1) / (v2 - v1);
+		Vector3 p = new Vector3();
+		p = p.add(p1.multiply(1 - t));
+		p = p.add(p2.multiply(t));
+		return p;
 	}
 
 	private List<Integer> getCaseEdgeList(int caseIndex) {
 		List<Integer> result = new ArrayList<>();
 		for (int i = (caseIndex * 15); i < (caseIndex + 1) * (15 - 1); i++) {
-			if(CaseDictionary.faces[i]!= -1){
+			if (CaseDictionary.faces[i] != -1) {
 				result.add(CaseDictionary.faces[i]);
 			}
 		}
