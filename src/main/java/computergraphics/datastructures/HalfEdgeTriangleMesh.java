@@ -170,6 +170,9 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 		computeTriangleNormals();
 	}
 
+	/**
+	 * berechnet Krümmung und setzt Farbe an Vertex
+	 */
 	public void doComputeCurvature() {
 		Map<Vertex, Double> curvatureMap = new HashMap<Vertex, Double>();
 		double minCurvature = Double.MAX_VALUE, maxCurvature = 0;
@@ -192,16 +195,17 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 			}
 			curvatureMap.put(vertex, curvature);
 		}
-		Color max = Color.DARKRED.brighter().brighter();// milka
-		Color min = Color.YELLOW;
+		Color min = Color.MEDIUMPURPLE.darker();// milka
+		Color max = Color.CHARTREUSE;
 		Vector3 minColor = new Vector3(min.getRed(), min.getGreen(), min.getBlue());
 		Vector3 maxColor = new Vector3(max.getRed(), max.getGreen(), max.getBlue());
-		Vector3 colorDif = new Vector3(max.getRed() - min.getRed(), max.getGreen() - min.getGreen(),
-				max.getBlue() - min.getBlue());
+		
 		for (Vertex v : vertexList) {
 			double m = (curvatureMap.get(v) - minCurvature) / (maxCurvature - minCurvature);
-			Vector3 color = minColor.add(colorDif.multiply(m * 100));
-			
+			Vector3 color = new Vector3();
+			color = color.add(maxColor.multiply(m*100));
+			color = color.add(minColor).multiply(100-m*100);
+			color.normalize();
 			v.setColor(color);
 		}
 	}
