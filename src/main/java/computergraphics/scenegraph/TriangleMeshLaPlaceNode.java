@@ -40,7 +40,6 @@ public class TriangleMeshLaPlaceNode extends Node {
 		gl.glBegin(GL2.GL_TRIANGLES);
 		for (int i = 0; i < mesh.getNumberOfTriangles(); i++) {
 			TriangleFacet facet = mesh.getFacet(i);
-			//gl.glNormal3d(facet.getNormal().get(0), facet.getNormal().get(1), facet.getNormal().get(2));
 			Vertex v = facet.getHalfEdge().getStartVertex();
 			gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
 			gl.glVertex3d(v.getPosition().get(0), v.getPosition().get(1), v.getPosition().get(2));
