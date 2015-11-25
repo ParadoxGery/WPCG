@@ -199,12 +199,12 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 		Color max = Color.CHARTREUSE;
 		Vector3 minColor = new Vector3(min.getRed(), min.getGreen(), min.getBlue());
 		Vector3 maxColor = new Vector3(max.getRed(), max.getGreen(), max.getBlue());
-		
+
 		for (Vertex v : vertexList) {
 			double m = (curvatureMap.get(v) - minCurvature) / (maxCurvature - minCurvature);
 			Vector3 color = new Vector3();
-			color = color.add(maxColor.multiply(m*100));
-			color = color.add(minColor).multiply(100-m*100);
+			color = color.add(maxColor.multiply(m * 100));
+			color = color.add(minColor).multiply(100 - m * 100);
 			color.normalize();
 			v.setColor(color);
 		}
