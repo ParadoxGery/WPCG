@@ -9,10 +9,12 @@ package computergraphics.applications;
 
 import computergraphics.datastructures.HalfEdgeTriangleMesh;
 import computergraphics.datastructures.ITriangleMesh;
+import computergraphics.datastructures.ImplicitFunktions;
 import computergraphics.datastructures.ObjIO;
 import computergraphics.framework.AbstractCGFrame;
 import computergraphics.scenegraph.ColorNode;
 import computergraphics.scenegraph.CurvatureNode;
+import computergraphics.scenegraph.MarchingCubesNode;
 import computergraphics.scenegraph.ShaderNode;
 import computergraphics.scenegraph.ShaderNode.ShaderType;
 import computergraphics.scenegraph.SingleTriangleNode;
@@ -51,15 +53,11 @@ public class CGFrame extends AbstractCGFrame {
     ColorNode objColor = new ColorNode(Color.MEDIUMPURPLE.darker());//114,84,154
     shaderNode.addChild(objColor);
     
-    ObjIO objio = new ObjIO();
     mesh = new HalfEdgeTriangleMesh();
-    objio.einlesen("meshes/cow.obj", mesh);
+
+    MarchingCubesNode cubeNode = new MarchingCubesNode(25,-2, 2, mesh, ImplicitFunktions.KUGEL);
     
-    //laPlace = new TriangleMeshLaPlaceNode(mesh);
-    //objColor.addChild(laPlace);
-    
-    curveNode = new CurvatureNode(mesh);
-    shaderNode.addChild(curveNode);
+    shaderNode.addChild(cubeNode);
     
   }
 

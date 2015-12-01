@@ -11,6 +11,7 @@ public class MarchingCube {
 	
 	public MarchingCube(List<Vector3> p, ImplicitFunktions f) {
 		points = new ArrayList<>(p);
+		values = new ArrayList<>();
 		for(Vector3 v : points){
 			values.add(f.f(v));
 		}

@@ -79,7 +79,7 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 	}
 
 	private void createTriangles(List<Vector3> points, List<Double> values) {
-		double tau = 0.5;
+		double tau = 0.31;
 		int caseIndex = 0;
 		for (int i = 0; i < values.size(); i++) {
 			if (values.get(i) > tau) {
@@ -88,27 +88,33 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 		}
 		List<Integer> edges = getCaseEdgeList(caseIndex);
 		for (int i = 0; i < edges.size(); i++) {
-			int p1i = EdgeToPoint.valueOf("E" + i).getPointIndexes().get(0);
-			int p2i = EdgeToPoint.valueOf("E" + i).getPointIndexes().get(1);
+			if(edges.get(i)!=-1){
+			int p1i = EdgeToPoint.valueOf("E" + edges.get(i)).getPointIndexes().get(0);
+			int p2i = EdgeToPoint.valueOf("E" + edges.get(i)).getPointIndexes().get(1);
 			Vector3 p = computePosition(points.get(p1i), points.get(p2i), values.get(p1i), values.get(p2i), tau);
 			vertexList.add(new Vertex(p));
+			}
 		}
 	}
 
 	private Vector3 computePosition(Vector3 p1, Vector3 p2, double v1, double v2, double tau) {
 		double t = (tau - v1) / (v2 - v1);
 		Vector3 p = new Vector3();
-		p = p.add(p1.multiply(1 - t));
+		p = p.add(p1.multiply(1-t));
 		p = p.add(p2.multiply(t));
+		if(Math.abs(p.get(0))>2||Math.abs(p.get(1))>2||Math.abs(p.get(2))>2){
+			System.err.println(p);
+		}
 		return p;
 	}
 
 	private List<Integer> getCaseEdgeList(int caseIndex) {
 		List<Integer> result = new ArrayList<>();
-		for (int i = (caseIndex * 15); i < (caseIndex + 1) * (15 - 1); i++) {
-			if (CaseDictionary.faces[i] != -1) {
-				result.add(CaseDictionary.faces[i]);
-			}
+		
+		for (int i = 0; i < 15; i++) {
+			//if (CaseDictionary.faces[i] != -1) {
+				result.add(CaseDictionary.faces[(caseIndex*15)+i]);
+			//}
 		}
 		return result;
 	}
@@ -301,6 +307,15 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 	@Override
 	public String getTextureFilename() {
 		return textureName;
+	}
+
+	public void doMarchingCube(List<MarchingCube> cubes) {
+		for(MarchingCube c : cubes){
+			createTriangles(c.getPoints(), c.getValues());
+		}
+		for(int i = 0; i<vertexList.size()-3;i+=3){
+			addTriangle(i, i+1, i+2);
+		}
 	}
 
 }
