@@ -91,6 +91,7 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 			int p1i = EdgeToPoint.valueOf("E" + i).getPointIndexes().get(0);
 			int p2i = EdgeToPoint.valueOf("E" + i).getPointIndexes().get(1);
 			Vector3 p = computePosition(points.get(p1i), points.get(p2i), values.get(p1i), values.get(p2i), tau);
+			vertexList.add(new Vertex(p));
 		}
 	}
 
