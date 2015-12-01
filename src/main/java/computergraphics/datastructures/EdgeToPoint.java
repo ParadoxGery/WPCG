@@ -35,8 +35,8 @@ public enum EdgeToPoint {
 		@Override
 		public List<Integer> getPointIndexes() {
 			List<Integer> points = new ArrayList<>();
-			points.add(0);
 			points.add(3);
+			points.add(0);
 			return points;
 		}
 	},
@@ -71,8 +71,8 @@ public enum EdgeToPoint {
 		@Override
 		public List<Integer> getPointIndexes() {
 			List<Integer> points = new ArrayList<>();
-			points.add(7);
 			points.add(4);
+			points.add(7);
 			return points;
 		}
 	},
@@ -108,7 +108,7 @@ public enum EdgeToPoint {
 		public List<Integer> getPointIndexes() {
 			List<Integer> points = new ArrayList<>();
 			points.add(6);
-			points.add(3);
+			points.add(2);
 			return points;
 		}
 	};
