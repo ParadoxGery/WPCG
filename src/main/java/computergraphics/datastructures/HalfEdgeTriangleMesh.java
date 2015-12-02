@@ -161,7 +161,7 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 				vertexNormal = vertexNormal.add(halfEdge.getFacet().getNormal());
 			}
 			vertexNormal.normalize();
-			vertex.setNormal(vertexNormal.multiply(-1));
+			vertex.setNormal(vertexNormal);
 		}
 	}
 	

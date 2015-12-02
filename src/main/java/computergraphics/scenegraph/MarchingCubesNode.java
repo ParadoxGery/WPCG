@@ -107,7 +107,6 @@ public class MarchingCubesNode extends Node {
 		gl.glBegin(GL2.GL_TRIANGLES);
 		for(int i = 0; i < mesh.getNumberOfTriangles(); i++) {
 			TriangleFacet facet = mesh.getFacet(i);
-			facet.setNormal(facet.getNormal().multiply(-1));
 			Vertex v = facet.getHalfEdge().getStartVertex();
 			//gl.glColor3d(v.getColor().get(0), v.getColor().get(1), v.getColor().get(2));
 			gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
