@@ -108,4 +108,13 @@ public class Vertex {
   public String toString() {
     return "Vertex";
   }
+  
+  @Override
+	public boolean equals(Object other) {
+	  if(!(other instanceof Vertex)){
+		  return false;
+	  }
+	  Vertex otherVertex = (Vertex)other;
+	  return getPosition().equals(otherVertex.getPosition());
+	}
 }

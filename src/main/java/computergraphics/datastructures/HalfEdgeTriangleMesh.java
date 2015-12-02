@@ -92,7 +92,12 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 				int p1i = EdgeToPoint.valueOf("E" + edges[i]).getPointIndexes().get(0);
 				int p2i = EdgeToPoint.valueOf("E" + edges[i]).getPointIndexes().get(1);
 				Vector3 p = computePosition(points.get(p1i), points.get(p2i), values.get(p1i), values.get(p2i), tau);
-				vertexList.add(new Vertex(p));
+				Vertex v = new Vertex(p);
+				if(vertexList.contains(v)){
+					vertexList.add(vertexList.get(vertexList.indexOf(v)));
+				}else {
+					vertexList.add(new Vertex(p));
+				}
 			}
 		}
 	}
@@ -102,9 +107,6 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 		Vector3 p = new Vector3();
 		p = p.add(p1.multiply(1 - t));
 		p = p.add(p2.multiply(t));
-		if(Math.abs(p.get(0)) > 2 || Math.abs(p.get(1)) > 2 || Math.abs(p.get(2)) > 2) {
-			System.err.println(p);
-		}
 		return p;
 	}
 	
@@ -159,7 +161,7 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 				vertexNormal = vertexNormal.add(halfEdge.getFacet().getNormal());
 			}
 			vertexNormal.normalize();
-			vertex.setNormal(vertexNormal);
+			vertex.setNormal(vertexNormal.multiply(-1));
 		}
 	}
 	
@@ -275,7 +277,7 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 			Vector3 normal = new Vector3(v12.cross(v13).getNormalized());
 			triangle.setNormal(normal);
 		}
-		//computeVertexNormals();
+		computeVertexNormals();
 		//doComputeCurvature();
 	}
 	

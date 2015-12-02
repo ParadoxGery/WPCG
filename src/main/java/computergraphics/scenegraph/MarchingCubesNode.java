@@ -108,18 +108,17 @@ public class MarchingCubesNode extends Node {
 		for(int i = 0; i < mesh.getNumberOfTriangles(); i++) {
 			TriangleFacet facet = mesh.getFacet(i);
 			facet.setNormal(facet.getNormal().multiply(-1));
-			gl.glNormal3d(facet.getNormal().get(0), facet.getNormal().get(1), facet.getNormal().get(2));
 			Vertex v = facet.getHalfEdge().getStartVertex();
 			//gl.glColor3d(v.getColor().get(0), v.getColor().get(1), v.getColor().get(2));
-			//gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
+			gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
 			gl.glVertex3d(v.getPosition().get(0), v.getPosition().get(1), v.getPosition().get(2));
 			v = facet.getHalfEdge().getNext().getStartVertex();
 			//gl.glColor3d(v.getColor().get(0), v.getColor().get(1), v.getColor().get(2));
-			//gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
+			gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
 			gl.glVertex3d(v.getPosition().get(0), v.getPosition().get(1), v.getPosition().get(2));
 			v = facet.getHalfEdge().getNext().getNext().getStartVertex();
 			//gl.glColor3d(v.getColor().get(0), v.getColor().get(1), v.getColor().get(2));
-			//gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
+			gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
 			gl.glVertex3d(v.getPosition().get(0), v.getPosition().get(1), v.getPosition().get(2));
 		}
 		gl.glEnd();
