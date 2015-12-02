@@ -9,7 +9,7 @@ public enum ImplicitFunktions {
 		public double f(Vector3 position) {
 			double r = 1;
 			return (Math.pow(position.get(0), 2) + Math.pow(position.get(1), 2) + Math.pow(position.get(2), 2)
-					- Math.pow(r, 2))*-1;
+					- Math.pow(r, 2));
 		}
 		
 		@Override
@@ -28,7 +28,7 @@ public enum ImplicitFunktions {
 					+ position.get(2) * position.get(2) + outerRadSquare - innerRadSquare)
 					* (position.get(0) * position.get(0) + position.get(1) * position.get(1)
 							+ position.get(2) * position.get(2) + outerRadSquare - innerRadSquare)
-					- 4 * outerRadSquare * (position.get(0) * position.get(0) + position.get(1) * position.get(1)))*-1;
+					- 4 * outerRadSquare * (position.get(0) * position.get(0) + position.get(1) * position.get(1)));
 		}
 		
 		@Override
@@ -43,7 +43,7 @@ public enum ImplicitFunktions {
 			double beta = MathHelpers.degree2radiens(70);
 			double alphaSquare = alpha*alpha;
 			double betaquare = beta*beta;
-			return ((position.get(0)*position.get(0)/alphaSquare)+(position.get(1)*position.get(1)/betaquare)-(position.get(2)*position.get(2)))*-1;
+			return ((position.get(0)*position.get(0)/alphaSquare)+(position.get(1)*position.get(1)/betaquare)-(position.get(2)*position.get(2)));
 		}
 
 		@Override
@@ -58,7 +58,7 @@ public enum ImplicitFunktions {
 			double beta = MathHelpers.degree2radiens(70);
 			double alphaSquare = alpha*alpha;
 			double betaquare = beta*beta;
-			return ((position.get(1)*position.get(1)/betaquare)-(position.get(0)*position.get(0)/alphaSquare)-position.get(2))*-1;
+			return ((position.get(1)*position.get(1)/betaquare)-(position.get(0)*position.get(0)/alphaSquare)-position.get(2));
 		}
 
 		@Override
@@ -101,7 +101,7 @@ public enum ImplicitFunktions {
 					(48*emz2*z2*(3*x2+3*y2+2*z2)) +
 					12*(1-z)*z *
 					((27*((x2+y2)*(x2+y2)))-(24*z2*(x2+y2))+(36*r2*y*z*(y2-3*x2))+4*z4) +
-					(9*x2+9*y2-2*z2)*(-81*((x2+y2)*(x2+y2))-72*z2*(x2+y2)+108*r2*x*z*(x2-3*y2)+4*z4));
+					((9*x2+9*y2-2*z2))*((-81*((x2+y2)*(x2+y2)))-(72*z2*(x2+y2))+(108*r2*x*z*(x2-3*y2))+4*z4));
 		}
 
 		@Override

@@ -51,7 +51,7 @@ public class CGFrame extends AbstractCGFrame {
 		
 		mesh = new HalfEdgeTriangleMesh();
 		
-		MarchingCubesNode cubeNode = new MarchingCubesNode(20, -2, 2, mesh, ImplicitFunktions.TORUS);
+		MarchingCubesNode cubeNode = new MarchingCubesNode(50, -3, 3, mesh, ImplicitFunktions.TORUS);
 		objColor.addChild(cubeNode);
 		
 		

@@ -295,8 +295,8 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh {
 		for(MarchingCube c : cubes) {
 			createTriangles(c.getPoints(), c.getValues(), funktion.getIso());
 		}
-		for(int i = 0; i < vertexList.size() - 3; i += 3) {
-			addTriangle(i, i + 1, i + 2);
+		for(int i = 2; i < vertexList.size(); i += 3) {
+			addTriangle(i-2, i, i-1);
 			
 		}
 		computeTriangleNormals();

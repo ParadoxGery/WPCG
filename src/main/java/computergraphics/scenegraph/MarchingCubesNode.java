@@ -43,7 +43,6 @@ public class MarchingCubesNode extends Node {
 			}
 		}
 		this.mesh.doMarchingCube(cubes, function);
-		//this.mesh.computeTriangleNormals();
 	}
 	
 	public void setUpdateGlList(boolean update) {

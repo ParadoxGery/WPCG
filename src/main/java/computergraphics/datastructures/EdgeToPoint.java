@@ -98,8 +98,8 @@ public enum EdgeToPoint {
 		@Override
 		public List<Integer> getPointIndexes() {
 			List<Integer> points = new ArrayList<>();
-			points.add(7);
 			points.add(3);
+			points.add(7);
 			return points;
 		}
 	},
