@@ -1,5 +1,6 @@
 package computergraphics.datastructures;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,5 +12,14 @@ public abstract class Kurve {
 
     public int getGrad(){
         return kontrollpunktList.size();
+    }
+
+    public Kurve(List<Kontrollpunkt> punkte){
+        kontrollpunktList = new ArrayList<>();
+        kontrollpunktList.addAll(punkte);
+    }
+
+    public List<Kontrollpunkt> getKontrollpunktList() {
+        return kontrollpunktList;
     }
 }
