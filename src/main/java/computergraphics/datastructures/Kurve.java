@@ -1,25 +1,11 @@
 package computergraphics.datastructures;
 
-import java.util.ArrayList;
-import java.util.List;
+import computergraphics.math.Vector3;
 
-/**
- * Generische Kurve
- * Created by Gery on 12.12.2015.
- */
-public abstract class Kurve {
-    private List<Kontrollpunkt> kontrollpunktList;
-
-    public int getGrad(){
-        return kontrollpunktList.size();
-    }
-
-    public Kurve(List<Kontrollpunkt> punkte){
-        kontrollpunktList = new ArrayList<>();
-        kontrollpunktList.addAll(punkte);
-    }
-
-    public List<Kontrollpunkt> getKontrollpunktList() {
-        return kontrollpunktList;
-    }
+public interface Kurve {
+	public Vector3 computePoint(double t);
+    public Vector3 computeBasis(int kontrollIndex,double t);
+    public void computeTangentDirection(double t);
+    public Vector3 getTangentStart();
+    public Vector3 getTangentDir();
 }

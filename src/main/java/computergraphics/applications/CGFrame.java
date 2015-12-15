@@ -4,18 +4,24 @@
 
 package computergraphics.applications;
 
+import computergraphics.datastructures.BezierKurve;
 import computergraphics.datastructures.HalfEdgeTriangleMesh;
 import computergraphics.datastructures.ITriangleMesh;
 import computergraphics.datastructures.ImplicitFunktions;
+import computergraphics.datastructures.Kurve;
+import computergraphics.datastructures.MonomKurve;
 import computergraphics.datastructures.ObjIO;
 import computergraphics.framework.AbstractCGFrame;
+import computergraphics.math.Vector3;
 import computergraphics.scenegraph.ColorNode;
 import computergraphics.scenegraph.CurvatureNode;
+import computergraphics.scenegraph.KurveNode;
 import computergraphics.scenegraph.MarchingCubesNode;
 import computergraphics.scenegraph.ShaderNode;
 import computergraphics.scenegraph.ShaderNode.ShaderType;
 import computergraphics.scenegraph.SingleTriangleNode;
 import computergraphics.scenegraph.SphereNode;
+import computergraphics.scenegraph.TranslationNode;
 import computergraphics.scenegraph.TriangleMeshLaPlaceNode;
 import computergraphics.scenegraph.TriangleMeshNode;
 import javafx.scene.paint.Color;
@@ -46,14 +52,41 @@ public class CGFrame extends AbstractCGFrame {
 		ShaderNode shaderNode = new ShaderNode(ShaderType.PHONG);
 		getRoot().addChild(shaderNode);
 		
-		ColorNode objColor = new ColorNode(Color.MEDIUMPURPLE.darker());//114,84,154
-		shaderNode.addChild(objColor);
+		ColorNode kontrollColor = new ColorNode(Color.MEDIUMPURPLE.darker());//114,84,154
+		shaderNode.addChild(kontrollColor);
 		
-		mesh = new HalfEdgeTriangleMesh();
+		ColorNode punktColor = new ColorNode(Color.BISQUE);
+		shaderNode.addChild(punktColor);
 		
-		MarchingCubesNode cubeNode = new MarchingCubesNode(50, -3, 3, mesh, ImplicitFunktions.TORUS);
-		objColor.addChild(cubeNode);
+		MonomKurve k = new MonomKurve();
+		//k.addKontrollpunkt(new Vector3(0, 0, 0));
+		//k.addKontrollpunkt(new Vector3(1, .5, .3));
+		//k.addKontrollpunkt(new Vector3(1, 1, 1));
+		//k.addKontrollpunkt(new Vector3(1, 2, 1));
+		//k.addKontrollpunkt(new Vector3(1, 1, 3));
+		k.addPunkt(new Vector3(0,0,0));
+		k.addPunkt(new Vector3(1,1,0));
+		k.addPunkt(new Vector3(1,1,1));
+		k.interpolate();
 		
+		for(Vector3 p : k.getPunkte()){
+			TranslationNode t = new TranslationNode(p);
+			SphereNode s = new SphereNode(.1, 10);
+			t.addChild(s);
+			punktColor.addChild(t);
+		}
+		
+		for(int i = 0; i< k.getGrad(); i++){
+			TranslationNode t = new TranslationNode(k.getKontrollpunktList().get(i));
+			SphereNode s = new SphereNode(.05, 10);
+			t.addChild(s);
+			kontrollColor.addChild(t);
+		}
+		
+		ColorNode kurveColor = new ColorNode(Color.BLACK.darker());
+		shaderNode.addChild(kurveColor);
+		KurveNode kn = new KurveNode(k,.001,.6);
+		kurveColor.addChild(kn);		
 		
 	}
 	
