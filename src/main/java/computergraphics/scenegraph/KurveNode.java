@@ -10,7 +10,7 @@ public class KurveNode extends Node {
 
 	private Kurve k;
 	private double stepSize = 0.1;
-	private double tangente = -1;
+	private double tangentenT = -1;
 	private int listId = 0;
 	
 	private boolean updateGlList = false;
@@ -26,7 +26,15 @@ public class KurveNode extends Node {
 	
 	public KurveNode(Kurve k,double stepSize,double tangente){
 		this(k,stepSize);
-		this.tangente = tangente;
+		this.tangentenT = tangente;
+	}
+	
+	public void setTangentenT(double t){
+		this.tangentenT = t;
+	}
+	
+	public void updateGlList(){
+		this.updateGlList = true;
 	}
 	
 	@Override
@@ -49,8 +57,8 @@ public class KurveNode extends Node {
 			Vector3 end = k.computePoint(i);
 			gl.glVertex3d(end.get(0), end.get(1), end.get(2));
 		}
-		if(tangente>-1){
-			k.computeTangentDirection(tangente);
+		if(tangentenT>-1){
+			k.computeTangentDirection(tangentenT);
 			Vector3 start = k.getTangentStart();
 			gl.glVertex3d(start.get(0), start.get(1), start.get(2));
 			Vector3 end = start.add(k.getTangentDir());

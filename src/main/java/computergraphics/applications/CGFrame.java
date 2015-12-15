@@ -4,6 +4,8 @@
 
 package computergraphics.applications;
 
+import javax.swing.JOptionPane;
+
 import computergraphics.datastructures.BezierKurve;
 import computergraphics.datastructures.HalfEdgeTriangleMesh;
 import computergraphics.datastructures.ITriangleMesh;
@@ -37,8 +39,7 @@ public class CGFrame extends AbstractCGFrame {
 	 */
 	private static final long serialVersionUID = 4257130065274995543L;
 	
-	private CurvatureNode curveNode;
-	private HalfEdgeTriangleMesh mesh;
+	private KurveNode kn;
 	
 	private double a = .5;
 	
@@ -85,7 +86,7 @@ public class CGFrame extends AbstractCGFrame {
 		
 		ColorNode kurveColor = new ColorNode(Color.BLACK.darker());
 		shaderNode.addChild(kurveColor);
-		KurveNode kn = new KurveNode(k,.001,.6);
+		kn = new KurveNode(k,.001,.6);
 		kurveColor.addChild(kn);		
 		
 	}
@@ -102,9 +103,11 @@ public class CGFrame extends AbstractCGFrame {
 	
 	public void keyPressed(int keyCode) {
 		System.out.println("Key pressed: " + (char)keyCode);
-		if((char)keyCode == 'S') {
-			mesh.doLaplaceSmoothing(a);
-			curveNode.setUpdateGlList(true);
+		if((char)keyCode == 'T') {
+			String tString = JOptionPane.showInputDialog(null,"Insert t parameter for tangente");
+			double t = Double.parseDouble(tString);
+			kn.setTangentenT(t);
+			kn.updateGlList();
 		}
 	}
 	
