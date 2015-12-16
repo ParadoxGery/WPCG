@@ -59,23 +59,23 @@ public class CGFrame extends AbstractCGFrame {
 		ColorNode punktColor = new ColorNode(Color.BISQUE);
 		shaderNode.addChild(punktColor);
 		
-		MonomKurve k = new MonomKurve();
-		//k.addKontrollpunkt(new Vector3(0, 0, 0));
-		//k.addKontrollpunkt(new Vector3(1, .5, .3));
-		//k.addKontrollpunkt(new Vector3(1, 1, 1));
-		//k.addKontrollpunkt(new Vector3(1, 2, 1));
-		//k.addKontrollpunkt(new Vector3(1, 1, 3));
-		k.addPunkt(new Vector3(0,0,0));
-		k.addPunkt(new Vector3(1,1,0));
-		k.addPunkt(new Vector3(1,1,1));
-		k.interpolate();
-		
+		BezierKurve k = new BezierKurve();
+		k.addKontrollpunkt(new Vector3(-2, 0, 0));
+		k.addKontrollpunkt(new Vector3(-1, 1, 0));
+		k.addKontrollpunkt(new Vector3(0, -2, 0));
+		k.addKontrollpunkt(new Vector3(1, 1, 0));
+		k.addKontrollpunkt(new Vector3(2, 0, 0));
+		//k.addPunkt(new Vector3(0,0,0));
+		//k.addPunkt(new Vector3(1,1,0));
+		//k.addPunkt(new Vector3(1,1,1));
+		//k.interpolate();
+		/*
 		for(Vector3 p : k.getPunkte()){
 			TranslationNode t = new TranslationNode(p);
 			SphereNode s = new SphereNode(.1, 10);
 			t.addChild(s);
 			punktColor.addChild(t);
-		}
+		}*/
 		
 		for(int i = 0; i< k.getGrad(); i++){
 			TranslationNode t = new TranslationNode(k.getKontrollpunktList().get(i));

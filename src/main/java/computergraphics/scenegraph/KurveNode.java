@@ -51,11 +51,14 @@ public class KurveNode extends Node {
 		listId = gl.glGenLists(1);
 		gl.glNewList(listId, GL2.GL_COMPILE);
 		gl.glBegin(GL.GL_LINES);
-		for (double i = stepSize; i < 1+stepSize ; i += stepSize) {
+		for (double i = stepSize; i <= 1 ; i += stepSize) {
 			Vector3 start = k.computePoint(i-stepSize);
 			gl.glVertex3d(start.get(0), start.get(1), start.get(2));
 			Vector3 end = k.computePoint(i);
 			gl.glVertex3d(end.get(0), end.get(1), end.get(2));
+			if(i > 1){
+				System.out.println("i to high: " + i);
+			}
 		}
 		if(tangentenT>-1){
 			k.computeTangentDirection(tangentenT);
