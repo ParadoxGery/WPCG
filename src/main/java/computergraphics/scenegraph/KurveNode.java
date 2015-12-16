@@ -13,6 +13,8 @@ public class KurveNode extends Node {
 	private double tangentenT = -1;
 	private int listId = 0;
 	
+	private boolean visible = true;
+	
 	private boolean updateGlList = false;
 	
 	public KurveNode(Kurve k){
@@ -39,10 +41,12 @@ public class KurveNode extends Node {
 	
 	@Override
 	public void drawGl(GL2 gl) {
-		if(listId == 0 || updateGlList){
-			init(gl);
-		}else {
-			gl.glCallList(listId);
+		if(visible){
+			if(listId == 0 || updateGlList){
+				init(gl);
+			}else {
+				gl.glCallList(listId);
+			}
 		}
 	}
 
@@ -69,5 +73,13 @@ public class KurveNode extends Node {
 		}
 		gl.glEnd();
 		gl.glEndList();
+	}
+	
+	public void toggle(){
+		if(visible){
+			visible = false;
+		}else {
+			visible = true;
+		}
 	}
 }
