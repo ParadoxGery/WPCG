@@ -17,9 +17,9 @@ public class BezierKurve extends AbstractKurve {
 	@Override
 	public Vector3 computeBasis(int kontrollIndex, double t) {
 		Vector3 result = getKontrollpunktList().get(kontrollIndex);
-		double ni = MathHelpers.over(getGrad(), kontrollIndex);
+		double ni = MathHelpers.over(getGrad()-1, kontrollIndex);
 		double ti = Math.pow(t, kontrollIndex);
-		double tni = Math.pow((1 - t), (getGrad() - kontrollIndex));
+		double tni = Math.pow((1 - t), (getGrad()-1 - kontrollIndex));
 		
 		//System.err.println(ni*ti*tni);
 		result = result.multiply(ni * ti * tni);
@@ -31,9 +31,9 @@ public class BezierKurve extends AbstractKurve {
 		Vector3 result = new Vector3();
 		for(int i = 0; i < getGrad()-1; i++){
 			Vector3 nminus1 = getKontrollpunktList().get(i+1).subtract(getKontrollpunktList().get(i));
-			double ni = MathHelpers.over(getGrad()-1, i);
+			double ni = MathHelpers.over(getGrad()-2, i);
 			double ti = Math.pow(t, i);
-			double tni = Math.pow((1 - t), (getGrad() - i));
+			double tni = Math.pow((1 - t), (getGrad()-2 - i));
 			nminus1 = nminus1.multiply(ni * ti * tni);
 			result = result.add(nminus1);
 		}
