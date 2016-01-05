@@ -10,7 +10,7 @@ import computergraphics.datastructures.BezierKurve;
 import computergraphics.datastructures.HalfEdgeTriangleMesh;
 import computergraphics.datastructures.ITriangleMesh;
 import computergraphics.datastructures.ImplicitFunktions;
-import computergraphics.datastructures.KurveI;
+import computergraphics.datastructures.Kurve;
 import computergraphics.datastructures.MonomKurve;
 import computergraphics.datastructures.ObjIO;
 import computergraphics.framework.AbstractCGFrame;
@@ -39,8 +39,7 @@ public class CGFrame extends AbstractCGFrame {
 	 */
 	private static final long serialVersionUID = 4257130065274995543L;
 	
-	private KurveNode bkn,mkn,mk2n;
-	
+	private KurveNode kn;
 	
 	private double a = .5;
 	
@@ -66,57 +65,29 @@ public class CGFrame extends AbstractCGFrame {
 		k.addKontrollpunkt(new Vector3(0, -2, 0));
 		k.addKontrollpunkt(new Vector3(1, 1, 0));
 		k.addKontrollpunkt(new Vector3(2, 0, 0));
-		
-		MonomKurve mk = new MonomKurve();
-		mk.addPunkt(new Vector3(0,0,0));
-		mk.addPunkt(new Vector3(1,1,0));
-		mk.addPunkt(new Vector3(1,1,1));
-		mk.interpolate();
-		
-		for(Vector3 p : mk.getPunkte()){
+		//k.addPunkt(new Vector3(0,0,0));
+		//k.addPunkt(new Vector3(1,1,0));
+		//k.addPunkt(new Vector3(1,1,1));
+		//k.interpolate();
+		/*
+		for(Vector3 p : k.getPunkte()){
 			TranslationNode t = new TranslationNode(p);
 			SphereNode s = new SphereNode(.1, 10);
 			t.addChild(s);
 			punktColor.addChild(t);
-		}
+		}*/
 		
-		MonomKurve mk2 = new MonomKurve();
-		mk2.addKontrollpunkt(new Vector3(0,1,0));
-		mk2.addKontrollpunkt(new Vector3(-1,0,0));
-		mk2.addKontrollpunkt(new Vector3(-1,1,0));
-		
-		for(int i = 0; i< mk.getGrad(); i++){
-			TranslationNode t = new TranslationNode(mk.getKontrollpunktList().get(i));
-			SphereNode s = new SphereNode(.05, 10);
-			t.addChild(s);
-			kontrollColor.addChild(t);
-		}
-		
-		for(int i = 0; i< mk2.getGrad(); i++){
-			TranslationNode t = new TranslationNode(mk2.getKontrollpunktList().get(i));
-			SphereNode s = new SphereNode(.05, 10);
-			t.addChild(s);
-			kontrollColor.addChild(t);
-		}
-				
 		for(int i = 0; i< k.getGrad(); i++){
 			TranslationNode t = new TranslationNode(k.getKontrollpunktList().get(i));
-			SphereNode s = new SphereNode(.05, 10);
+			SphereNode s = new SphereNode(.05, 10,new Vector3(0,0,0));
 			t.addChild(s);
 			kontrollColor.addChild(t);
 		}
 		
 		ColorNode kurveColor = new ColorNode(Color.BLACK.darker());
 		shaderNode.addChild(kurveColor);
-		
-		bkn = new KurveNode(k,.001,.5);
-		kurveColor.addChild(bkn);
-		
-		mkn = new KurveNode(mk,.001,.5);
-		kurveColor.addChild(mkn);	
-		
-		mk2n = new KurveNode(mk2,.001,.5);
-		kurveColor.addChild(mk2n);	
+		kn = new KurveNode(k,.001,.6);
+		kurveColor.addChild(kn);		
 		
 	}
 	
@@ -135,21 +106,8 @@ public class CGFrame extends AbstractCGFrame {
 		if((char)keyCode == 'T') {
 			String tString = JOptionPane.showInputDialog(null,"Insert t parameter for tangente");
 			double t = Double.parseDouble(tString);
-			bkn.setTangentenT(t);
-			bkn.updateGlList();
-			mkn.setTangentenT(t);
-			mkn.updateGlList();
-			mk2n.setTangentenT(t);
-			mk2n.updateGlList();
-		}
-		if((char)keyCode == '1'){
-			bkn.toggle();
-		}
-		if((char)keyCode == '2'){
-			mkn.toggle();
-		}
-		if((char)keyCode == '3'){
-			mk2n.toggle();
+			kn.setTangentenT(t);
+			kn.updateGlList();
 		}
 	}
 	

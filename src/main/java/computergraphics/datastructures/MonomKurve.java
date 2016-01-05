@@ -5,14 +5,14 @@ import java.util.List;
 
 import computergraphics.math.Vector3;
 
-public class MonomKurve extends Kurve {
+public class MonomKurve extends AbstractKurve {
 
 	private List<Vector3> punkte = new ArrayList<>();
 	
 	@Override
 	public Vector3 computePoint(double t) {
 		Vector3 result = new Vector3();
-		for (int i = 0; i < getKontrollpunktList().size(); i++) {
+		for (int i = 0; i < getGrad(); i++) {
 			result = result.add(computeBasis(i, t));
 		}
 		return result;
@@ -26,7 +26,7 @@ public class MonomKurve extends Kurve {
 	@Override
 	public Vector3 computePoint_ (double t){
 		Vector3 result = new Vector3();
-		for (int i = 1; i < getKontrollpunktList().size(); i++) {
+		for (int i = 1; i < getGrad(); i++) {
 			Vector3 tmp = getKontrollpunktList().get(i).multiply(Math.pow(t, i-1));
 			result = result.add(tmp.multiply(i));
 		}
@@ -40,7 +40,7 @@ public class MonomKurve extends Kurve {
 	public void interpolate(){
 		if(punkte.size() == 2){
 			addKontrollpunkt(punkte.get(0));
-			addKontrollpunkt(punkte.get(1).subtract(punkte.get(0)));
+			addKontrollpunkt(punkte.get(1));
 		}else if (punkte.size() == 3){
 			Vector3 c0 = punkte.get(0);
 			//Vector3 p1 = c0.add(punkte.get(1).multiply(.5)).add(punkte.get(2).multiply(.25));

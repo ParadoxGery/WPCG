@@ -34,7 +34,7 @@ public class Tree extends GroupNode {
 	    tree.addChild(crownTranslation);
 	    ColorNode crownColor = new ColorNode(0, 1, 0);
 	    crownTranslation.addChild(crownColor);
-	    SphereNode crownNode = new SphereNode(2, 16);
+	    SphereNode crownNode = new SphereNode(2, 16,new Vector3(0,0,0));
 	    crownColor.addChild(crownNode);
 	    
 	    this.addChild(treeSize);
