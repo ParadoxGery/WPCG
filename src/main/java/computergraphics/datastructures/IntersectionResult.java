@@ -11,12 +11,12 @@ public class IntersectionResult {
   /**
    * The intersection happens at this point.
    */
-  public Vector3 point;
+  public Vector3 point = new Vector3();
 
   /**
    * Normal at the given point.
    */
-  public Vector3 normal;
+  public Vector3 normal = new Vector3();
 
   /**
    * Intersected object
