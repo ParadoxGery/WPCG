@@ -15,10 +15,15 @@ import computergraphics.datastructures.MonomKurve;
 import computergraphics.datastructures.ObjIO;
 import computergraphics.framework.AbstractCGFrame;
 import computergraphics.math.Vector3;
+import computergraphics.projects.raytracing.ImageViewer;
+import computergraphics.projects.raytracing.Raytracer;
 import computergraphics.scenegraph.ColorNode;
 import computergraphics.scenegraph.CurvatureNode;
+import computergraphics.scenegraph.DebugNode;
 import computergraphics.scenegraph.KurveNode;
+import computergraphics.scenegraph.LightSource;
 import computergraphics.scenegraph.MarchingCubesNode;
+import computergraphics.scenegraph.PlainNode;
 import computergraphics.scenegraph.ShaderNode;
 import computergraphics.scenegraph.ShaderNode.ShaderType;
 import computergraphics.scenegraph.SingleTriangleNode;
@@ -39,9 +44,7 @@ public class CGFrame extends AbstractCGFrame {
 	 */
 	private static final long serialVersionUID = 4257130065274995543L;
 	
-	private KurveNode kn;
-	
-	private double a = .5;
+	private Raytracer r;
 	
 	/**
 	 * Constructor.
@@ -50,44 +53,24 @@ public class CGFrame extends AbstractCGFrame {
 		super(timerInverval);
 		
 		// Shader node does the lighting computation
-		ShaderNode shaderNode = new ShaderNode(ShaderType.PHONG);
-		getRoot().addChild(shaderNode);
+		//ShaderNode shaderNode = new ShaderNode(ShaderType.PHONG);
+		//getRoot().addChild(shaderNode);
 		
-		ColorNode kontrollColor = new ColorNode(Color.MEDIUMPURPLE.darker());//114,84,154
-		shaderNode.addChild(kontrollColor);
+		LightSource ls = new LightSource(new Vector3(0,2,2), new Vector3(1,1,1));
+		DebugNode lsNode = new DebugNode(.3, 10, ls.getPosition(),Color.RED);
+		getRoot().addChild(lsNode);
 		
-		ColorNode punktColor = new ColorNode(Color.BISQUE);
-		shaderNode.addChild(punktColor);
+		SphereNode sn = new SphereNode(.5, 20, new Vector3(0,0,2),Color.AQUA);
+		getRoot().addChild(sn);
 		
-		BezierKurve k = new BezierKurve();
-		k.addKontrollpunkt(new Vector3(-2, 0, 0));
-		k.addKontrollpunkt(new Vector3(-1, 1, 0));
-		k.addKontrollpunkt(new Vector3(0, -2, 0));
-		k.addKontrollpunkt(new Vector3(1, 1, 0));
-		k.addKontrollpunkt(new Vector3(2, 0, 0));
-		//k.addPunkt(new Vector3(0,0,0));
-		//k.addPunkt(new Vector3(1,1,0));
-		//k.addPunkt(new Vector3(1,1,1));
-		//k.interpolate();
-		/*
-		for(Vector3 p : k.getPunkte()){
-			TranslationNode t = new TranslationNode(p);
-			SphereNode s = new SphereNode(.1, 10);
-			t.addChild(s);
-			punktColor.addChild(t);
-		}*/
+		SphereNode sn2 = new SphereNode(.2, 20, new Vector3(0,1,2),Color.AQUA);
+		getRoot().addChild(sn2);
 		
-		for(int i = 0; i< k.getGrad(); i++){
-			TranslationNode t = new TranslationNode(k.getKontrollpunktList().get(i));
-			SphereNode s = new SphereNode(.05, 10,new Vector3(0,0,0));
-			t.addChild(s);
-			kontrollColor.addChild(t);
-		}
+		PlainNode pn = new PlainNode(new Vector3(), new Vector3(-1,2,1), new Vector3(1,2,1), 100,Color.BROWN);
+		getRoot().addChild(pn);
 		
-		ColorNode kurveColor = new ColorNode(Color.BLACK.darker());
-		shaderNode.addChild(kurveColor);
-		kn = new KurveNode(k,.001,.6);
-		kurveColor.addChild(kn);		
+		r = new Raytracer(getCamera(), getRoot());
+		r.addLightsource(ls);
 		
 	}
 	
@@ -104,10 +87,7 @@ public class CGFrame extends AbstractCGFrame {
 	public void keyPressed(int keyCode) {
 		System.out.println("Key pressed: " + (char)keyCode);
 		if((char)keyCode == 'T') {
-			String tString = JOptionPane.showInputDialog(null,"Insert t parameter for tangente");
-			double t = Double.parseDouble(tString);
-			kn.setTangentenT(t);
-			kn.updateGlList();
+			new ImageViewer(r.render(1024, 768));
 		}
 	}
 	

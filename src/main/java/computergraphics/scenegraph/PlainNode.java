@@ -5,6 +5,7 @@ import com.jogamp.opengl.GL2;
 import computergraphics.datastructures.IntersectionResult;
 import computergraphics.datastructures.Ray3D;
 import computergraphics.math.Vector3;
+import javafx.scene.paint.Color;
 
 public class PlainNode extends Node {
 
@@ -29,6 +30,8 @@ public class PlainNode extends Node {
 	 * c-a
 	 */
 	private Vector3 v = new Vector3();
+	
+	private javafx.scene.paint.Color color = Color.GREEN;
 
 	public PlainNode(Vector3 a, Vector3 b, Vector3 c, double scale) {
 		this.a.copy(a);
@@ -41,11 +44,22 @@ public class PlainNode extends Node {
 		this.u = this.u.multiply(scale);
 		this.v = this.v.multiply(scale);
 
-		this.nE = u.cross(v);
+		this.nE = u.cross(v).getNormalized();
 		this.pE = this.pE.add(a);
 	}
+	
+	public PlainNode(Vector3 a, Vector3 b, Vector3 c, double scale, javafx.scene.paint.Color color) {
+		this(a,b,c,scale);
+		this.color = color;
+	}
 
-	public IntersectionResult berechneSchnitt(Ray3D ray) {
+	@Override
+	public Vector3 getColor(){
+		return new Vector3(color.getRed(),color.getGreen(),color.getBlue());
+	}
+	
+	@Override
+	public IntersectionResult calcIntersection(Node node,Ray3D ray) {
 		double nepe = nE.multiply(pE);
 		double neps = nE.multiply(ray.getPoint());
 		double nevs = nE.multiply(ray.getDirection());
@@ -71,12 +85,16 @@ public class PlainNode extends Node {
 	@Override
 	public void drawGl(GL2 gl) {
 		gl.glBegin(GL2.GL_QUADS);
+		gl.glPushMatrix();
+		//set color
+		gl.glColor3d(color.getRed(),color.getGreen(),color.getBlue());
 		gl.glNormal3d(nE.get(0), nE.get(1), nE.get(2));
 		gl.glVertex3d(u.get(0), u.get(1), u.get(2));
 		gl.glVertex3d(v.get(0), v.get(1), v.get(2));
 		gl.glVertex3d(-1 * u.get(0), -1 * u.get(1), -1 * u.get(2));
 		gl.glVertex3d(-1 * v.get(0), -1 * v.get(1), -1 * v.get(2));
 		gl.glEnd();
+		gl.glPopMatrix();
 	}
 
 }

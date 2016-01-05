@@ -22,4 +22,5 @@ public class IntersectionResult {
    * Intersected object
    */
   public Node object;
+  
 }

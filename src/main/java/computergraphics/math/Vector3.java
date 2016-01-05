@@ -96,6 +96,11 @@ public class Vector3 {
 		return Math.sqrt(getSqrNorm());
 	}
 	
+	public double getNormBetween(Vector3 other){
+		Vector3 v = subtract(other);
+		return v.getNorm();
+	}
+	
 	/**
 	 * Setter.
 	 */

@@ -23,53 +23,64 @@ import computergraphics.math.Vector3;
  */
 public abstract class Node {
 
-  /**
-   * List of child nodes
-   */
-  private List<Node> children = new ArrayList<Node>();
+	/**
+	 * List of child nodes
+	 */
+	private List<Node> children = new ArrayList<Node>();
 
-  /**
-   * Add a child node.
-   */
-  public void addChild(Node child) {
-    children.add(child);
-  }
+	/**
+	 * Add a child node.
+	 */
+	public void addChild(Node child) {
+		children.add(child);
+	}
 
-  /**
-   * Return the child at the given index.
-   */
-  public Node getChildNode(int index) {
-    if (index < 0 || index >= getNumberOfChildren()) {
-      System.out.println("getChildNode: invalid index.");
-      return null;
-    }
-    return children.get(index);
-  }
+	/**
+	 * Return the child at the given index.
+	 */
+	public Node getChildNode(int index) {
+		if (index < 0 || index >= getNumberOfChildren()) {
+			System.out.println("getChildNode: invalid index.");
+			return null;
+		}
+		return children.get(index);
+	}
 
-  /**
-   * Return the number of children
-   */
-  public int getNumberOfChildren() {
-    return children.size();
-  }
+	/**
+	 * Return the number of children
+	 */
+	public int getNumberOfChildren() {
+		return children.size();
+	}
 
-  /**
-   * This method is called to draw the node using OpenGL commands. Override in
-   * implementing nodes. Do not forget to call the same method for the children.
-   */
-  public abstract void drawGl(GL2 gl);
+	/**
+	 * This method is called to draw the node using OpenGL commands. Override in
+	 * implementing nodes. Do not forget to call the same method for the
+	 * children.
+	 */
+	public abstract void drawGl(GL2 gl);
 
-  // DEBUGGING
-  public IntersectionResult calcIntersection(Node node, Ray3D ray) {
-    return null;
-  }
+	// DEBUGGING
+	public IntersectionResult calcIntersection(Node node, Ray3D ray) {
+		return null;
+	}
 
-  public Vector3 getColor() {
-    return new Vector3(0, 1, 0);
-  }
-  
-  public IntersectionResult findIntersection(Node object, Ray3D ray) {
-    return null;
-  }
+	public Vector3 getColor() {
+		return new Vector3(0, 1, 0);
+	}
+
+	public IntersectionResult findIntersection(Node object, Ray3D ray) {
+		return null;
+	}
+
+	public List<Node> getAllChildNodesRec() {
+		List<Node> nodes = new ArrayList<>();
+		for (int i = 0; i < getNumberOfChildren(); i++) {
+			if(getChildNode(i) instanceof DebugNode) continue;
+			nodes.add(getChildNode(i));
+			nodes.addAll(getChildNode(i).getAllChildNodesRec());
+		}
+		return nodes;
+	}
 
 }

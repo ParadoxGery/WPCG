@@ -19,7 +19,7 @@ public class PlainNodeTest {
 	public void testBerechneSchnittNegativ() {
 		PlainNode pn = new PlainNode(new Vector3(), Vector3.X_AXIS, Vector3.Y_AXIS, 10);
 		Ray3D ray = new Ray3D(Vector3.Z_AXIS, Vector3.X_AXIS);
-		assertNull(pn.berechneSchnitt(ray));
+		assertNull(pn.calcIntersection(pn,ray));
 	}
 
 	@Test
@@ -27,7 +27,7 @@ public class PlainNodeTest {
 		PlainNode pn = new PlainNode(new Vector3(), Vector3.X_AXIS, Vector3.Y_AXIS, 10);
 		Ray3D ray = new Ray3D(Vector3.Z_AXIS, new Vector3(0, 0, -1));
 		Vector3 expected = new Vector3();
-		assertEquals(expected, pn.berechneSchnitt(ray).point);
+		assertEquals(expected, pn.calcIntersection(pn,ray).point);
 	}
 	
 }

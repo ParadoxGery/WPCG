@@ -13,6 +13,7 @@ import com.jogamp.opengl.glu.GLUquadric;
 import computergraphics.datastructures.IntersectionResult;
 import computergraphics.datastructures.Ray3D;
 import computergraphics.math.Vector3;
+import javafx.scene.paint.Color;
 
 /**
  * Geometry of a simple sphere.
@@ -37,6 +38,11 @@ public class SphereNode extends Node {
 	private Vector3 focusPoint = new Vector3();
 
 	/**
+	 * 
+	 */
+	private Color color = Color.GREEN;
+	
+	/**
 	 * Constructor.
 	 */
 	public SphereNode(double radius, int resolution, Vector3 focusPoint) {
@@ -44,8 +50,19 @@ public class SphereNode extends Node {
 		this.resolution = resolution;
 		this.focusPoint.copy(focusPoint);
 	}
+	
+	public SphereNode(double radius, int resolution, Vector3 focusPoint, Color color){
+		this(radius,resolution,focusPoint);
+		this.color = color;
+	}
 
-	public IntersectionResult berechneSchnitt(Ray3D ray) {
+	@Override
+	public Vector3 getColor(){
+		return new Vector3(color.getRed(),color.getGreen(),color.getBlue());
+	}
+	
+	@Override
+	public IntersectionResult calcIntersection(Node node,Ray3D ray) {
 		double p = ((ray.getPoint().multiply(ray.getDirection()) * 2) - (focusPoint.multiply(ray.getDirection()) * 2))
 				/ (ray.getDirection().multiply(ray.getDirection()));
 		double q = ((ray.getPoint().multiply(ray.getPoint())) - (ray.getPoint().multiply(focusPoint) * 2)
@@ -87,6 +104,8 @@ public class SphereNode extends Node {
 		GLU glu = new GLU();
 		// Apply translation
 		gl.glPushMatrix();
+		//set color
+		gl.glColor3d(color.getRed(),color.getGreen(),color.getBlue());
 		gl.glTranslatef((float) focusPoint.get(0), (float) focusPoint.get(1), (float) focusPoint.get(2));
 		GLUquadric earth = glu.gluNewQuadric();
 		glu.gluQuadricDrawStyle(earth, GLU.GLU_FILL);
