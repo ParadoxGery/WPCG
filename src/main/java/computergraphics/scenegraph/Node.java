@@ -73,6 +73,10 @@ public abstract class Node {
 		return null;
 	}
 
+	/**
+	 * gibt eine Liste aller Kinder und Kindeskinder....  zurück nicht die debugNode
+	 * @return Liste alle Kinder und Kindeskinder
+	 */
 	public List<Node> getAllChildNodesRec() {
 		List<Node> nodes = new ArrayList<>();
 		for (int i = 0; i < getNumberOfChildren(); i++) {

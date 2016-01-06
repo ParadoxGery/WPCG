@@ -41,7 +41,7 @@ public class SphereNode extends Node {
 	 * 
 	 */
 	private Color color = Color.GREEN;
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -50,52 +50,53 @@ public class SphereNode extends Node {
 		this.resolution = resolution;
 		this.focusPoint.copy(focusPoint);
 	}
-	
-	public SphereNode(double radius, int resolution, Vector3 focusPoint, Color color){
-		this(radius,resolution,focusPoint);
+
+	public SphereNode(double radius, int resolution, Vector3 focusPoint, Color color) {
+		this(radius, resolution, focusPoint);
 		this.color = color;
 	}
 
 	@Override
-	public Vector3 getColor(){
-		return new Vector3(color.getRed(),color.getGreen(),color.getBlue());
+	public Vector3 getColor() {
+		return new Vector3(color.getRed(), color.getGreen(), color.getBlue());
 	}
-	
+
 	@Override
-	public IntersectionResult calcIntersection(Node node,Ray3D ray) {
+	public IntersectionResult calcIntersection(Node node, Ray3D ray) {
+		// pq Formel
 		double p = ((ray.getPoint().multiply(ray.getDirection()) * 2) - (focusPoint.multiply(ray.getDirection()) * 2))
 				/ (ray.getDirection().multiply(ray.getDirection()));
 		double q = ((ray.getPoint().multiply(ray.getPoint())) - (ray.getPoint().multiply(focusPoint) * 2)
 				+ (focusPoint.multiply(focusPoint)) - (radius * radius))
 				/ (ray.getDirection().multiply(ray.getDirection()));
+		// pq Ergebnis 1
 		double l1 = (-p / 2) + Math.sqrt(((p * p) / 4) - q);
+		// pq Ergebnis 2
 		double l2 = (-p / 2) - Math.sqrt(((p * p) / 4) - q);
 
-		if (l1 > 0 && l2 > 0) {
-			
-			double lambda = 0;
-		
-			if (l1 < l2) {
-				lambda = l1;
-			} else {
-				lambda = l2;
-			}
+		double lambda = 0;
 
-			Vector3 xs = new Vector3();
-			xs.copy(ray.getPoint());
-			xs = xs.add(ray.getDirection().multiply(lambda));
-
-			IntersectionResult result = new IntersectionResult();
-			result.normal.copy(xs);
-			result.normal = result.normal.subtract(focusPoint);
-			result.normal.normalize();
-			result.object = this;
-			result.point.copy(xs);
-
-			return result;
+		if (l1 < l2 && l1 > 0) {
+			lambda = l1;
+		} else if (l2 > 0) {
+			lambda = l2;
+		} else {
+			return null;
 		}
-		
-		return null;
+
+		Vector3 xs = new Vector3();
+		xs.copy(ray.getPoint());
+		xs = xs.add(ray.getDirection().multiply(lambda));
+
+		IntersectionResult result = new IntersectionResult();
+		result.normal.copy(xs);
+		result.normal = result.normal.subtract(focusPoint);
+		result.normal.normalize();
+		result.object = this;
+		result.point.copy(xs);
+
+		return result;
+
 	}
 
 	@Override
@@ -104,8 +105,8 @@ public class SphereNode extends Node {
 		GLU glu = new GLU();
 		// Apply translation
 		gl.glPushMatrix();
-		//set color
-		gl.glColor3d(color.getRed(),color.getGreen(),color.getBlue());
+		// set color
+		gl.glColor3d(color.getRed(), color.getGreen(), color.getBlue());
 		gl.glTranslatef((float) focusPoint.get(0), (float) focusPoint.get(1), (float) focusPoint.get(2));
 		GLUquadric earth = glu.gluNewQuadric();
 		glu.gluQuadricDrawStyle(earth, GLU.GLU_FILL);

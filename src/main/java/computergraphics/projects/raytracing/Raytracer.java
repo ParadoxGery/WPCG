@@ -22,12 +22,12 @@ import computergraphics.scenegraph.SphereNode;
 public class Raytracer {
 
 	private static final int DEFAULTMATERIALPARAMETER = 20;
-	
+
 	/**
 	 * List of Lightsources
 	 */
 	private List<LightSource> lightsources = new ArrayList();
-	
+
 	/**
 	 * Reference to the current camera.
 	 */
@@ -108,52 +108,96 @@ public class Raytracer {
 	 * @return Color in RGB. All values are in [0,1];
 	 */
 	private Vector3 trace(Ray3D ray, int recursion) {
-		Color c = Color.white;
+		Vector3 hintergrundFarbe = new Vector3(0, 0, 0);
 		IntersectionResult result = null;
 		List<Node> nodes = new ArrayList<>(rootNode.getAllChildNodesRec());
-		for(Node n : nodes){
+		Vector3 resultColor = new Vector3();
+
+		// suche den nähesten schnittpunkt mit einer Node
+		for (Node n : nodes) {
 			IntersectionResult newInterseciton = n.calcIntersection(n, ray);
-			if(newInterseciton != null){
-				if(result == null){
+			if (newInterseciton != null) {
+				if (result == null) {
 					result = newInterseciton;
-				}else if(newInterseciton.point.getNormBetween(ray.getPoint())<result.point.getNormBetween(ray.getPoint())){
+				} else if (newInterseciton.point.getNormBetween(ray.getPoint()) < result.point
+						.getNormBetween(ray.getPoint())) {
 					result = newInterseciton;
 				}
 			}
 		}
-		// Your task
-		if(result == null) return new Vector3(0,0,0);
-		
-		Vector3 e = camera.getEye().subtract(result.point).getNormalized();
-		
+		// wenn keine schnittpunkt vorhanden zeichne Hintergrundfarbe
+		if (result == null)
+			return hintergrundFarbe;
+
+		// noch nicht gebraucht
+		// Vector3 e = camera.getEye().subtract(result.point).getNormalized();
+
 		Vector3 colorDiff = new Vector3();
 		Vector3 colorSpec = new Vector3();
-		
-		for(LightSource ls : lightsources){
-			
-			Vector3 l = ls.getPosition().subtract(result.point).getNormalized();
-			double nl = result.normal.multiply(l);
-			if(nl>0){
-				colorDiff = result.object.getColor().multiply(nl);
-			}
-			
-			Vector3 r = l.subtract(result.normal.multiply(l.multiply(result.normal)*2));
-			Vector3 minusVs = ray.getDirection().multiply(-1);
-			double r_vs = r.multiply(minusVs);
-			if(r_vs>0){
-				colorSpec = new Vector3(1,1,1);
-				colorSpec = colorSpec.multiply(Math.pow(r.multiply(minusVs), DEFAULTMATERIALPARAMETER));
+
+		// berechne beleuchtung für mehrere Lichtquellen an eimen
+		// punkt(schnittpunkt)
+		int countShadows = 0;
+		for (LightSource ls : lightsources) {
+			Ray3D shadowRay = new Ray3D(result.point, ls.getPosition().subtract(result.point).getNormalized());
+
+			if (traceShadow(shadowRay, result.object, nodes)) {
+				countShadows++;
+				if(countShadows == lightsources.size()){
+					return new Vector3();
+				}
+				continue;
+			} else {
+				Vector3 l = ls.getPosition().subtract(result.point).getNormalized();
+				double nl = result.normal.multiply(l);
+				if (nl > 0) {
+					// Diffuses Licht
+					colorDiff = colorDiff.add(result.object.getColor().multiply(nl));
+				}
+
+				Vector3 r = l.subtract(result.normal.multiply(l.multiply(result.normal) * 2));
+				Vector3 minusVs = ray.getDirection().multiply(1);
+				double r_vs = r.multiply(minusVs);
+				if (r_vs > 0) {
+					// Speculares Licht
+					colorSpec = colorSpec.add(
+							new Vector3(1, 1, 1).multiply(Math.pow(r.multiply(minusVs), DEFAULTMATERIALPARAMETER)));
+				}
 			}
 		}
-		//Ray3D shadowRay = new Ray3D(result.point, lightsources.get(0).getPosition().subtract(result.point).getNormalized());
-		//IntersectionResult shadowResult = result.object.calcIntersection(result.object, shadowRay);
-		//if(shadowResult != null){
-			//return new Vector3(0,0,0);
-		//}
-		return result.object.getColor().multiply(.3).add(colorSpec.multiply(.3)).add(colorDiff.multiply(.3));
+		// beleuchtung gewichtet aufaddieren
+		resultColor = result.object.getColor().multiply(.3).add(colorSpec.multiply(.3)).add(colorDiff.multiply(.3));
+		if (resultColor.get(0) > 1.0)
+			resultColor.set(0, 1.0);
+		if (resultColor.get(1) > 1.0)
+			resultColor.set(1, 1.0);
+		if (resultColor.get(2) > 1.0)
+			resultColor.set(2, 1.0);
+		return resultColor;
 	}
-	
-	public void addLightsource(LightSource ls){
+
+	private boolean traceShadow(Ray3D ray, Node startNode, List<Node> nodes) {
+		IntersectionResult shadowResult = null;
+		for (Node n : nodes) {
+			if (n.equals(startNode))
+				continue;
+			IntersectionResult newInterseciton = n.calcIntersection(n, ray);
+			if (newInterseciton != null) {
+				if (shadowResult == null) {
+					shadowResult = newInterseciton;
+				} else if (newInterseciton.point.getNormBetween(ray.getPoint()) < shadowResult.point
+						.getNormBetween(ray.getPoint())) {
+					shadowResult = newInterseciton;
+				}
+			}
+		}
+		if (shadowResult != null) {
+			return true;
+		}
+		return false;
+	}
+
+	public void addLightsource(LightSource ls) {
 		lightsources.add(ls);
 	}
 

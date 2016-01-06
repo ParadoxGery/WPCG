@@ -56,11 +56,15 @@ public class CGFrame extends AbstractCGFrame {
 		//ShaderNode shaderNode = new ShaderNode(ShaderType.PHONG);
 		//getRoot().addChild(shaderNode);
 		
-		LightSource ls = new LightSource(new Vector3(0,2,2), new Vector3(1,1,1));
+		LightSource ls = new LightSource(new Vector3(-.1,-1,3.5), new Vector3(1,1,1));
 		DebugNode lsNode = new DebugNode(.3, 10, ls.getPosition(),Color.RED);
 		getRoot().addChild(lsNode);
 		
-		SphereNode sn = new SphereNode(.5, 20, new Vector3(0,0,2),Color.AQUA);
+		LightSource ls2 = new LightSource(new Vector3(.1,-1,3.5), new Vector3(1,1,1));
+		DebugNode lsNode2 = new DebugNode(.3, 10, ls2.getPosition(),Color.RED);
+		getRoot().addChild(lsNode2);
+		
+		SphereNode sn = new SphereNode(2, 20, new Vector3(0,4,2),Color.AQUA);
 		getRoot().addChild(sn);
 		
 		SphereNode sn2 = new SphereNode(.2, 20, new Vector3(0,1,2),Color.AQUA);
@@ -71,6 +75,7 @@ public class CGFrame extends AbstractCGFrame {
 		
 		r = new Raytracer(getCamera(), getRoot());
 		r.addLightsource(ls);
+		r.addLightsource(ls2);
 		
 	}
 	

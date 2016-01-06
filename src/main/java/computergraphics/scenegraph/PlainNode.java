@@ -31,6 +31,9 @@ public class PlainNode extends Node {
 	 */
 	private Vector3 v = new Vector3();
 	
+	/**
+	 * Farbe der Ebene
+	 */
 	private javafx.scene.paint.Color color = Color.GREEN;
 
 	public PlainNode(Vector3 a, Vector3 b, Vector3 c, double scale) {
@@ -38,13 +41,11 @@ public class PlainNode extends Node {
 		this.b.copy(b);
 		this.c.copy(c);
 
-		this.u = b.subtract(a);
-		this.v = c.subtract(a);
-
-		this.u = this.u.multiply(scale);
-		this.v = this.v.multiply(scale);
+		this.v = b.subtract(a);
+		this.u = c.subtract(a);
 
 		this.nE = u.cross(v).getNormalized();
+		//Mittelpunkt der Ebene pE
 		this.pE = this.pE.add(a);
 	}
 	
@@ -60,19 +61,20 @@ public class PlainNode extends Node {
 	
 	@Override
 	public IntersectionResult calcIntersection(Node node,Ray3D ray) {
-		double nepe = nE.multiply(pE);
-		double neps = nE.multiply(ray.getPoint());
-		double nevs = nE.multiply(ray.getDirection());
+		double nepe = nE.multiply(pE); 					//vector nE * vector pE
+		double neps = nE.multiply(ray.getPoint()); 		//vector nE * vector pS
+		double nevs = nE.multiply(ray.getDirection());	//vector nE * vector vS
 
 		double lambda = (nepe - neps) / nevs;
 
-		if (lambda <= 0) {
+		//wenn lambda > 0 dann gibt  es ein ergebnis
+		if (lambda >= 0) {
 			Vector3 xs = new Vector3();
 			xs.copy(ray.getPoint());
 			xs = xs.add(ray.getDirection().multiply(lambda));
 
 			IntersectionResult result = new IntersectionResult();
-			result.normal.copy(nE);
+			result.normal.copy(nE); //jeder punkt der ebene hat die selbe Normale
 			result.object = this;
 			result.point.copy(xs);
 
@@ -95,6 +97,12 @@ public class PlainNode extends Node {
 		gl.glVertex3d(-1 * v.get(0), -1 * v.get(1), -1 * v.get(2));
 		gl.glEnd();
 		gl.glPopMatrix();
+		
+		gl.glBegin(GL2.GL_LINES);
+		gl.glVertex3d(a.get(0), a.get(1), a.get(2));
+		Vector3 normalEnd = a.add(nE);
+		gl.glVertex3d(normalEnd.get(0), normalEnd.get(1), normalEnd.get(2));
+		gl.glEnd();
 	}
 
 }
