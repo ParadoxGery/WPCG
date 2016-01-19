@@ -10,6 +10,7 @@ import java.util.List;
 import computergraphics.datastructures.IntersectionResult;
 import computergraphics.datastructures.Ray3D;
 import computergraphics.framework.Camera;
+import computergraphics.math.MathHelpers;
 import computergraphics.math.Vector3;
 import computergraphics.scenegraph.ColorNode;
 import computergraphics.scenegraph.LightSource;
@@ -129,8 +130,8 @@ public class Raytracer {
 		if (result == null)
 			return hintergrundFarbe;
 
-		// noch nicht gebraucht
-		// Vector3 e = camera.getEye().subtract(result.point).getNormalized();
+		
+		Vector3 e = camera.getEye().subtract(result.point).getNormalized();
 
 		Vector3 colorDiff = new Vector3();
 		Vector3 colorSpec = new Vector3();
@@ -152,7 +153,7 @@ public class Raytracer {
 				double nl = result.normal.multiply(l);
 				if (nl > 0) {
 					// Diffuses Licht
-					colorDiff = colorDiff.add(result.object.getColor().multiply(nl));
+					colorDiff = colorDiff.add(result.object.getColor(result.point).multiply(nl));
 				}
 
 				Vector3 r = l.subtract(result.normal.multiply(l.multiply(result.normal) * 2));
@@ -165,8 +166,22 @@ public class Raytracer {
 				}
 			}
 		}
+
 		// beleuchtung gewichtet aufaddieren
-		resultColor = result.object.getColor().multiply(.3).add(colorSpec.multiply(.3)).add(colorDiff.multiply(.3));
+		resultColor = result.object.getColor(result.point).multiply(.3).add(colorSpec.multiply(.3)).add(colorDiff.multiply(.3));
+		
+		if(recursion <= MathHelpers.MAGIC_NUMBER && result.object.getR() > 0){
+			Vector3 r = new Vector3();
+			r = result.normal.multiply(e.multiply(result.normal) * 2);
+			r = e.subtract(r).multiply(-1); // R = E - 2(E * N)N
+			Ray3D reflektionRay = new Ray3D(result.point, r);
+			Vector3 reflektionColor = trace(reflektionRay, recursion+1);
+			
+			resultColor = resultColor.multiply(1-result.object.getR());
+			resultColor = resultColor.add(reflektionColor.multiply(result.object.getR()));
+		}
+		
+		
 		if (resultColor.get(0) > 1.0)
 			resultColor.set(0, 1.0);
 		if (resultColor.get(1) > 1.0)

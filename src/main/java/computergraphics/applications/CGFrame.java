@@ -23,6 +23,7 @@ import computergraphics.scenegraph.DebugNode;
 import computergraphics.scenegraph.KurveNode;
 import computergraphics.scenegraph.LightSource;
 import computergraphics.scenegraph.MarchingCubesNode;
+import computergraphics.scenegraph.Node.Material;
 import computergraphics.scenegraph.PlainNode;
 import computergraphics.scenegraph.ShaderNode;
 import computergraphics.scenegraph.ShaderNode.ShaderType;
@@ -64,13 +65,13 @@ public class CGFrame extends AbstractCGFrame {
 		DebugNode lsNode2 = new DebugNode(.3, 10, ls2.getPosition(),Color.RED);
 		getRoot().addChild(lsNode2);
 		
-		SphereNode sn = new SphereNode(2, 20, new Vector3(0,4,2),Color.AQUA);
+		SphereNode sn = new SphereNode(2, 20, new Vector3(0,4,2),Color.AQUA,Material.REFLEKTION25);
 		getRoot().addChild(sn);
 		
-		SphereNode sn2 = new SphereNode(.2, 20, new Vector3(0,1,2),Color.AQUA);
+		SphereNode sn2 = new SphereNode(.2, 20, new Vector3(0,1,2),Color.AQUA,Material.HALF_REFLEKTION);
 		getRoot().addChild(sn2);
 		
-		PlainNode pn = new PlainNode(new Vector3(), new Vector3(-1,2,1), new Vector3(1,2,1), 100,Color.BROWN);
+		PlainNode pn = new PlainNode(new Vector3(), new Vector3(-1,2,1), new Vector3(1,2,1), 100,Color.BROWN,Material.REFLEKTION75);
 		getRoot().addChild(pn);
 		
 		r = new Raytracer(getCamera(), getRoot());

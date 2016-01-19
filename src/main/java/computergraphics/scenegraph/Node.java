@@ -65,7 +65,7 @@ public abstract class Node {
 		return null;
 	}
 
-	public Vector3 getColor() {
+	public Vector3 getColor(Vector3 point) {
 		return new Vector3(0, 1, 0);
 	}
 
@@ -86,5 +86,26 @@ public abstract class Node {
 		}
 		return nodes;
 	}
+	
+	public double getR(){
+		return 0;
+	}
 
+	public enum Material {
+		NO_REFLEKTION(0),
+		REFLEKTION25(0.25),
+		ONLY_REFLEKTION(1),
+		REFLEKTION75(.75),
+		HALF_REFLEKTION(0.5);
+		
+		private double r = 0;
+		Material(double reflektion){
+			r = reflektion;
+		}
+		
+		public double getR(){
+			return r;
+		}
+		
+	}
 }

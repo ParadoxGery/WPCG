@@ -28,6 +28,7 @@ public final class MathHelpers {
     public static final int INDEX_3 = 3;
     private static final double ONE_HUNDRET_EIGHTY = 180.0;
 
+    public static final int MAGIC_NUMBER = 1337;
     
     /**
      * Disallow instanciation.

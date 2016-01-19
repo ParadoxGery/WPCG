@@ -12,6 +12,7 @@ import com.jogamp.opengl.glu.GLUquadric;
 
 import computergraphics.datastructures.IntersectionResult;
 import computergraphics.datastructures.Ray3D;
+import computergraphics.math.MathHelpers;
 import computergraphics.math.Vector3;
 import javafx.scene.paint.Color;
 
@@ -42,6 +43,8 @@ public class SphereNode extends Node {
 	 */
 	private Color color = Color.GREEN;
 
+	private Material mat = Material.NO_REFLEKTION;
+	
 	/**
 	 * Constructor.
 	 */
@@ -55,10 +58,20 @@ public class SphereNode extends Node {
 		this(radius, resolution, focusPoint);
 		this.color = color;
 	}
+	
+	public SphereNode(double radius, int resolution, Vector3 focusPoint, Color color,Material mat){
+		this(radius, resolution, focusPoint,color);
+		this.mat = mat;
+	}
 
 	@Override
-	public Vector3 getColor() {
+	public Vector3 getColor(Vector3 point) {
 		return new Vector3(color.getRed(), color.getGreen(), color.getBlue());
+	}
+	
+	@Override
+	public double getR(){
+		return mat.getR();
 	}
 
 	@Override
@@ -76,9 +89,9 @@ public class SphereNode extends Node {
 
 		double lambda = 0;
 
-		if (l1 < l2 && l1 > 0) {
+		if (l1 < l2 && l1 > MathHelpers.EPSILON) {
 			lambda = l1;
-		} else if (l2 > 0) {
+		} else if (l2 > MathHelpers.EPSILON) {
 			lambda = l2;
 		} else {
 			return null;
@@ -119,4 +132,6 @@ public class SphereNode extends Node {
 		gl.glPopMatrix();
 	}
 
+	
+	
 }
