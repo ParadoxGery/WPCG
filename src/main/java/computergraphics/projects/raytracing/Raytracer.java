@@ -170,7 +170,7 @@ public class Raytracer {
 		// beleuchtung gewichtet aufaddieren
 		resultColor = result.object.getColor(result.point).multiply(.3).add(colorSpec.multiply(.3)).add(colorDiff.multiply(.3));
 		
-		if(recursion <= MathHelpers.MAGIC_NUMBER && result.object.getR() > 0){
+		if(recursion < MathHelpers.MAGIC_NUMBER && result.object.getR() > 0){
 			Vector3 r = new Vector3();
 			r = result.normal.multiply(e.multiply(result.normal) * 2);
 			r = e.subtract(r).multiply(-1); // R = E - 2(E * N)N

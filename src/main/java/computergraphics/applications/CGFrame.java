@@ -57,11 +57,11 @@ public class CGFrame extends AbstractCGFrame {
 		//ShaderNode shaderNode = new ShaderNode(ShaderType.PHONG);
 		//getRoot().addChild(shaderNode);
 		
-		LightSource ls = new LightSource(new Vector3(-.1,-1,3.5), new Vector3(1,1,1));
+		LightSource ls = new LightSource(new Vector3(-.1,-1,5), new Vector3(1,1,1));
 		DebugNode lsNode = new DebugNode(.3, 10, ls.getPosition(),Color.RED);
 		getRoot().addChild(lsNode);
 		
-		LightSource ls2 = new LightSource(new Vector3(.1,-1,3.5), new Vector3(1,1,1));
+		LightSource ls2 = new LightSource(new Vector3(.1,-1,5), new Vector3(1,1,1));
 		DebugNode lsNode2 = new DebugNode(.3, 10, ls2.getPosition(),Color.RED);
 		getRoot().addChild(lsNode2);
 		
@@ -70,6 +70,9 @@ public class CGFrame extends AbstractCGFrame {
 		
 		SphereNode sn2 = new SphereNode(.2, 20, new Vector3(0,1,2),Color.AQUA,Material.HALF_REFLEKTION);
 		getRoot().addChild(sn2);
+		
+		SphereNode sn3 = new SphereNode(2, 20, new Vector3(0,-3,2),Color.AQUA,Material.ONLY_REFLEKTION);
+		getRoot().addChild(sn3);
 		
 		PlainNode pn = new PlainNode(new Vector3(), new Vector3(-1,2,1), new Vector3(1,2,1), 100,Color.BROWN,Material.REFLEKTION75);
 		getRoot().addChild(pn);
@@ -93,7 +96,7 @@ public class CGFrame extends AbstractCGFrame {
 	public void keyPressed(int keyCode) {
 		System.out.println("Key pressed: " + (char)keyCode);
 		if((char)keyCode == 'T') {
-			new ImageViewer(r.render(1024, 768));
+			new ImageViewer(r.render(1680, 1050));
 		}
 	}
 	

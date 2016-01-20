@@ -80,8 +80,8 @@ public class PlainNode extends Node {
 		double u, v;
 		u = tu.multiply(point);
 		v = tv.multiply(point);
-		u = u > MathHelpers.EPSILON ? u : -u + 1;
-		v = v > MathHelpers.EPSILON ? v : -v + 1;
+		u = u > 0 ? u : -u + 1;
+		v = v > 0 ? v : -v + 1;
 		if((int)u%2 == (int)v%2) return new Vector3();
 		return new Vector3(1,1,1);
 	}
